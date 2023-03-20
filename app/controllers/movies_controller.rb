@@ -10,7 +10,29 @@ class MoviesController < ApplicationController
     movie = Movie.find(params[:id])
     render json: movie
   end
+  # longer version using only
+  # def show
+  #   movie = Movie.find(params[:id])
+  #   render json: movie.to_json(only: [:id, :title, :year, :length, :director, :description, :poster_url, :category, :discount, :female_director])
+  # end
+  #shorter version using except 
+  # def show
+  #   movie = Movie.find(params[:id])
+  #   render json: movie.to_json(except: [:created_at, :updated_at])
+  # end
 
+  #movie summary for a single movie
+  def summary
+    movie = Movie.find(params[:id])
+    render json: movie, serializer: MovieSummarySerializer
+  end 
+
+  #render the full collection of movies
+  def summaries
+    movies = Movie.all
+    render json: movies, each_serializer: MovieSummarySerializer
+  end
+  
   private
 
   def render_not_found_response
